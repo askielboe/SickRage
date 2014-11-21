@@ -65,6 +65,24 @@ normal_regexes = [
      -(?P<release_group>[^- ]+([. _-]\[.*\])?))?)?$              # Group
      '''),
 
+    ('standard_parentheses',
+     # Show.Name.(S01E02).Source.Quality.Etc-Group
+     # Show Name - (S01E02) - My Ep Name
+     # Show.Name.(S01.E03).My.Ep.Name
+     # Show.Name.(S01E02E03).Source.Quality.Etc-Group
+     # Show Name - (S01E02-03) - My Ep Name
+     # Show.Name.(S01.E02.E03)
+     '''
+     ^((?P<series_name>.+?)[. _-]+)?             # Show_Name and separator
+     \(s(?P<season_num>\d+)[. _-]*               # S01 and optional separator
+     e(?P<ep_num>\d+)\)?                         # E02 and separator
+     (([. _-]*e|-)                               # linking e/- char
+     (?P<extra_ep_num>(?!(1080|720|480)[pi])\d+))*\)?   # additional E03/etc
+     [. _-]*((?P<extra_info>.+?)                 # Source_Quality_Etc-
+     ((?<![. _-])(?<!WEB)                        # Make sure this is really the release group
+     -(?P<release_group>[^- ]+([. _-]\[.*\])?))?)?$              # Group
+     '''),
+
     ('fov',
      # Show_Name.1x02.Source_Quality_Etc-Group
      # Show Name - 1x02 - My Ep Name
